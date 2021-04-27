@@ -1,12 +1,7 @@
-﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
-RUN echo "http://mirrors.aliyun.com/alpine/v3.10/main/" > /etc/apk/repositories \
-	&& apk add --no-cache  icu-libs \
-	&& apk add --no-cache --repository http://mirrors.aliyun.com/alpine/edge/testing/ libgdiplus \
-	&& apk add --no-cache tzdata \
-	&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone \
-    && apk del tzdata
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+﻿#使用阿里云镜像，微软镜像太慢
+#FROM docker pull mcr.microsoft.com/dotnet/aspnet:5.0.2
+FROM registry.cn-hangzhou.aliyuncs.com/colder-public/aspnet:5.0.2
+RUN rm -f /etc/localtime && ln -sv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
 WORKDIR /app
 COPY . .
 EXPOSE 5000
